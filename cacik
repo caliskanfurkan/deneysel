@@ -1,0 +1,36 @@
+input {
+  tcp {
+    codec => json_lines { charset => "UTF-8" }
+    # codec => json_lines { charset => CP1252 }
+    port => 5000
+    tags => [ "tcpjson" ]
+    type => "nxlog"
+  }
+}
+filter {
+  if [type] == "nxlog" {
+    json {
+      source => "message"
+    }
+    if [SourceModuleName] == "eventlog" {
+      mutate {
+        replace => [ "message", "%{Message}" ]
+      }
+      mutate {
+        remove_field => [ "Message" ]
+      }
+    }
+    date {
+      locale => "en"
+      # timezone => "Etc/GMT"
+      timezone => "Asia/Shanghai"
+      match => [ "EventTime", "YYYY-MM-dd HH:mm:ss" ]
+    }
+    
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["YOUR_ELASTICSEARCH_SERVER"]
+  }
+}
