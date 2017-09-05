@@ -1,0 +1,47 @@
+[profiles]
+packages=fast,filecatcher,dump
+[dump]
+dump=mft,mbr,ram
+mft_export=True
+[output]
+type=csv
+destination=local
+dir=output
+[filecatcher]
+recursively=True
+path=c:\tmp|*,c:\temp|*,c:\recycler|*,%WINDIR%|*,%USERPROFILE%|*
+mime_filter=application/msword;application/octet-stream;application/xarchive;application/x-ms-pe;application/x-ms-dosexecutable;application/x-lha;application/x-dosexec;application/xelc;application/x-executable,
+statically linked,
+stripped;application/x-gzip;application/x-object, not
+stripped;application/x-zip;
+mime_zip=application/x-ms-pe;application/x-ms-dosexecutable;application/x-dosexec;application/x-executable,
+statically
+linked, stripped
+compare=AND
+size_min=6k
+size_max=100M
+ext_file=*
+zip_ext_file=*
+zip=True
+[modules]
+pe
+yara
+[pe]
+pe_mime_type=application/x-ms-pe;application/x-ms-dosexecutable;application/x-ms-pe;application/x-dosexec;application/xexecutable,
+statically linked, stripped
+filtered_certificates=True
+cert_filtered_issuer=issuer;O=Microsoft Corporation|Microsoft TimeStamp
+PCA|Microsoft Time-Stamp PCA Microsoft Windows Verification
+PCA|Microsoft Root Authority Microsoft Root Authority Microsoft
+Timestamping PCA Microsoft Timestamping PCA Microsoft Root Authority
+Microsoft Windows Verification Intermediate PCA Microsoft Root
+Authority
+cert_filtered_subject=subject;O=Microsoft Corporation|Microsoft TimeStamp
+Service|Microsoft Time-Stamp Service Microsoft Windows|Microsoft
+Root Authority Microsoft Root Authority Microsoft Timestamping Service
+Microsoft Timestamping Service Microsoft Timestamping PCA Microsoft
+Windows Component Publisher Microsoft Windows Verification
+Intermediate PCA
+[yara]
+filtered_yara=False
+dir_rules=yara-rules
