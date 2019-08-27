@@ -34,3 +34,5 @@ output {
     hosts => ["YOUR_ELASTICSEARCH_SERVER"]
   }
 }
+
+test
